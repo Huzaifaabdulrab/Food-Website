@@ -27,6 +27,7 @@ const ProductDetail = ({ handleAddToCart, handleFavorite }) => {
         setLoading(false);
       }
     };
+    
     fetchProduct();
   }, [id]);
 

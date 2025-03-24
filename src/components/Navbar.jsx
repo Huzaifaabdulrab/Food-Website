@@ -1,8 +1,28 @@
-import { FaHome, FaSearch, FaHeart, FaUser, FaShoppingCart, FaCog } from "react-icons/fa";
+import { FaHome, FaSearch, FaHeart, FaUser, FaShoppingCart, FaCog, FaFilter } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { FiltersContext } from "../../Context";
 
 const Navbar = () => {
+  const [active, setActive] = useState("Home");
+  const [searchBar, setSearchBar] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { filters, setFilters } = useContext(FiltersContext);
+
+  useEffect(() => {
+    const path = location.pathname;
+    const matchedRoute = 
+      path === "/" ? "Home" : 
+      path.includes("favorite") ? "Favorite" : 
+      path.includes("profile") ? "Profile" : 
+      path.includes("cart") ? "Cart" : 
+      path.includes("settings") ? "Settings" : "Home";
+    
+    setActive(matchedRoute);
+  }, [location.pathname]);
+
   return (
     <>
       {/* Top Navbar */}
@@ -10,20 +30,33 @@ const Navbar = () => {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="bg-[var(--primary)] bg-opacity-80 backdrop-blur-xl fixed top-0 w-full shadow-2xl border-b border-white/10 z-50"
+        className="bg-[var(--primary)] bg-opacity-80 backdrop-blur-xl fixed top-0 w-full border-b border-white/10 z-50"
       >
         
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-12 h-16">
           
-          {/* Logo */}
-          <motion.h1
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-            className="text-white text-2xl md:text-3xl font-extrabold tracking-wide drop-shadow-lg"
-          >
-            Food <span className="text-yellow-300">Hub</span>
-          </motion.h1>
+          {/* Logo & Search Icon (for sm/xs) */}
+          <div className="flex items-center max-md:w-full">
+            <motion.h1
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+              className="text-white text-2xl md:text-3xl font-extrabold tracking-wide drop-shadow-lg"
+            >
+              Food <span className="text-yellow-300">Hub</span>
+            </motion.h1>
+
+            {/* Search Icon for sm/xs */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              className="md:hidden text-white text-2xl cursor-pointer hover:text-yellow-300 transition-all duration-300 ml-auto"
+              onClick={() => { setSearchBar((prev) => !prev); window.scrollTo(0, 0) }}
+            >
+              <FaSearch />
+            </motion.div>
+          </div>
 
           {/* Search Bar */}
           <motion.div
@@ -50,7 +83,7 @@ const Navbar = () => {
               { icon: FaShoppingCart, label: "Cart", path: "/cart" },
               { icon: FaCog, label: "Settings", path: "/settings" },
             ].map(({ icon: Icon, label, path }, index) => (
-              <Link to={path} passHref>
+              <Link to={path} passHref key={index}>
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -67,7 +100,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* Bottom Navbar for Mobile */}
+      {/* Bottom Navbar (Only for sm & xs) */}
       <motion.div
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -79,7 +112,6 @@ const Navbar = () => {
           { icon: FaHeart, label: "Favorite", path: "/Favorite" },
           { icon: FaUser, label: "Profile", path: "/profile" },
           { icon: FaShoppingCart, label: "Cart", path: "/Cart" },
-          
           { icon: FaCog, label: "Settings", path: "/settings" },
         ].map(({ icon: Icon, label, path }, index) => (
           <Link key={index} to={path} passHref>

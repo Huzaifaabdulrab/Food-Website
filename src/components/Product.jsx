@@ -23,7 +23,7 @@ const Product = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mt-20">
       {products.map((product) =>
           <div
-            key={product.id}
+            key={product._id}
             className="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200"
           >
             <img className="w-full h-56 object-cover" src={product.image} alt={product.title} />
@@ -48,7 +48,7 @@ const Product = () => {
               </div>
               <Link
                 to={`/product/${product._id}`} // Ensure product.id is passed correctly
-                className="mt-4 block text-center bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition"
+                className="mt-4 block text-center bg-[var(--primary)] text-white py-2 rounded-lg hover:bg-var(--secondary) transition"
               >
                 View Details
               </Link>

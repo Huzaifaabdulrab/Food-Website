@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar"
-import Product from "../components/Product"
 
 const Home = () => {
+  const { filters } = useContext(FiltersContext);
+
   return (
     <div>
-      {/* <Navbar/> */}
-<Product/>
+      <Navbar/>
     </div>
   )
 }
